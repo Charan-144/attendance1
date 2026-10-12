@@ -47,7 +47,7 @@
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 8px 28px #18344b0b;
+      box-shadow: 0 8px 28px rgba(24, 52, 75, 0.05);
     }
 
     label {
@@ -57,8 +57,7 @@
       margin-bottom: 8px;
     }
 
-    select,
-    button {
+    select, button {
       font: inherit;
       width: 100%;
       padding: 13px;
@@ -69,6 +68,7 @@
       border: 1px solid #cbd7e2;
       background: #fff;
       margin-bottom: 15px;
+      color: #18344b;
     }
 
     button {
@@ -104,20 +104,14 @@
       color: white;
     }
 
-    video,
-    canvas {
+    video, canvas {
       width: 100%;
       height: auto;
       display: block;
     }
 
-    video {
+    video, canvas {
       display: none;
-    }
-
-    canvas {
-      display: none;
-      background: #101820;
     }
 
     .placeholder {
@@ -171,18 +165,32 @@
       color: #617385;
       line-height: 1.5;
     }
+
+    .employee-info {
+      margin: 0 0 12px;
+      padding: 12px;
+      border-radius: 9px;
+      background: #f3f7fa;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .employee-info strong {
+      color: #0f4d68;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
+  <main class="container">
 
-    <div class="header">
+    <header class="header">
       <h1>LeapStart Attendance</h1>
       <p>
-        Capture a live selfie and submit your attendance with GPS details.
+        Employee attendance with a selfie and GPS location.
       </p>
-    </div>
+    </header>
 
     <section class="card">
       <label for="employee">Select employee</label>
@@ -191,7 +199,9 @@
         <option value="">-- Select your name --</option>
       </select>
 
-      <button id="locationBtn" onclick="getLocation()">
+      <div id="employeeInfo" class="employee-info hidden"></div>
+
+      <button id="locationBtn" type="button" onclick="getLocation()">
         1. Get Current Location
       </button>
 
@@ -202,19 +212,20 @@ Location: Not captured</div>
       <button
         id="cameraBtn"
         class="secondary"
+        type="button"
         onclick="startCamera()"
         disabled>
         2. Open Camera
       </button>
 
       <p class="required-note">
-        Allow camera and location access when prompted.
-        Camera access requires HTTPS and a supported browser.
+        Allow camera and location access when your browser asks.
+        This website must be opened over HTTPS.
       </p>
     </section>
 
     <section class="card">
-      <h3>Live camera and geotagged photo</h3>
+      <h3>Live camera and selfie</h3>
 
       <div class="camera-box">
         <div id="placeholder" class="placeholder">
@@ -228,6 +239,7 @@ Location: Not captured</div>
       <button
         id="captureBtn"
         class="capture"
+        type="button"
         onclick="capturePhoto()"
         disabled>
         3. Capture Selfie
@@ -236,12 +248,14 @@ Location: Not captured</div>
       <button
         id="retakeBtn"
         class="secondary hidden"
+        type="button"
         onclick="retakePhoto()">
         Retake Photo
       </button>
 
       <button
         id="submitBtn"
+        type="button"
         onclick="submitAttendance()"
         disabled>
         4. Submit Attendance
@@ -251,22 +265,21 @@ Location: Not captured</div>
         id="status"
         class="status"
         role="status"
-        aria-live="polite">
-      </div>
+        aria-live="polite"></div>
     </section>
 
     <p class="small">
-      Your photo and attendance information will be submitted to the
-      LeapStart attendance system. Take only your own photo and follow
-      your organization's attendance policy.
+      Attendance details and the captured selfie will be sent to the
+      LeapStart attendance backend. GPS information is supplied by
+      the browser and should not be treated as independently verified
+      proof of physical presence.
     </p>
 
     <iframe
       id="submitFrame"
       name="submitFrame"
       title="Attendance submission response"
-      class="hidden">
-    </iframe>
+      class="hidden"></iframe>
 
     <form
       id="submitForm"
@@ -280,25 +293,31 @@ Location: Not captured</div>
         id="payloadInput">
     </form>
 
-  </div>
+  </main>
 
   <script>
-    // Your deployed Google Apps Script web app URL.
+    "use strict";
+
+    // Your deployed Apps Script web app URL.
     const SCRIPT_URL =
       "https://script.google.com/macros/s/AKfycbyQSIir9sTPtzlncX0Thktz8lJcYWu5x1DlThpbAjbIodGXBXxx9_Ap168WXSw4O_tq/exec";
 
-    // Replace these examples with your actual employee names and roles.
+    /*
+      SAMPLE EMPLOYEE DIRECTORY.
+      Replace the names and roles below with your actual staff details.
+      Format: { name: "Full Name", role: "Job Title" }
+    */
     const employees = [
-      ["Aarav Reddy", "Mentor"],
-      ["Priya Sharma", "Operations"],
-      ["Rohit Verma", "Software Engineer"],
-      ["Ananya Iyer", "Data Scientist"],
-      ["Karthik Naidu", "Tech Lead"],
-      ["Sneha Kapoor", "HR Executive"],
-      ["Vikram Singh", "Admissions"],
-      ["Meera Nair", "QA Engineer"],
-      ["Arjun Patel", "Designer"],
-      ["Divya Menon", "Accounts"]
+      { name: "Aarav Reddy", role: "Mentor" },
+      { name: "Priya Sharma", role: "Operations" },
+      { name: "Rohit Verma", role: "Software Engineer" },
+      { name: "Ananya Iyer", role: "Data Scientist" },
+      { name: "Karthik Naidu", role: "Tech Lead" },
+      { name: "Sneha Kapoor", role: "HR Executive" },
+      { name: "Vikram Singh", role: "Admissions" },
+      { name: "Meera Nair", role: "QA Engineer" },
+      { name: "Arjun Patel", role: "Designer" },
+      { name: "Divya Menon", role: "Accounts" }
     ];
 
     const $ = id => document.getElementById(id);
@@ -315,39 +334,43 @@ Location: Not captured</div>
 
     $("submitForm").action = SCRIPT_URL;
 
-    // Populate employee dropdown.
-    employees.forEach((person, index) => {
-      const option = document.createElement("option");
-      option.value = String(index);
-      option.textContent = person[0] + " — " + person[1];
-      $("employee").appendChild(option);
-    });
+    // Populate dropdown and show a useful message if no employees exist.
+    function populateEmployees() {
+      const dropdown = $("employee");
 
-    $("employee").addEventListener("change", () => {
-      capturedPhoto = null;
+      employees.forEach((person, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = person.name + " — " + person.role;
+        dropdown.appendChild(option);
+      });
 
-      $("submitBtn").disabled = true;
-      $("retakeBtn").classList.add("hidden");
-
-      canvas.style.display = "none";
-      $("placeholder").classList.remove("hidden");
-
-      if ($("employee").value === "") {
-        $("cameraBtn").disabled = true;
-        $("captureBtn").disabled = true;
-        stopCamera();
-      } else {
-        $("cameraBtn").disabled = !locationData;
-        $("status").textContent = "";
+      if (employees.length === 0) {
+        showStatus(
+          "No employees are configured. Add employees to the employees array in index.html.",
+          "error"
+        );
       }
-    });
+    }
+
+    populateEmployees();
 
     function selectedEmployee() {
-      const index = $("employee").value;
+      const value = $("employee").value;
 
-      return index === ""
-        ? null
-        : employees[Number(index)];
+      if (value === "") return null;
+
+      const index = Number(value);
+
+      if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= employees.length
+      ) {
+        return null;
+      }
+
+      return employees[index];
     }
 
     function showStatus(message, type) {
@@ -355,7 +378,36 @@ Location: Not captured</div>
       $("status").className = "status " + (type || "");
     }
 
-    // STEP 1: Get current GPS location.
+    $("employee").addEventListener("change", () => {
+      capturedPhoto = null;
+
+      $("submitBtn").disabled = true;
+      $("captureBtn").disabled = true;
+      $("retakeBtn").classList.add("hidden");
+
+      canvas.style.display = "none";
+      $("placeholder").classList.remove("hidden");
+
+      const person = selectedEmployee();
+
+      if (!person) {
+        $("employeeInfo").classList.add("hidden");
+        $("cameraBtn").disabled = true;
+        stopCamera();
+        return;
+      }
+
+      $("employeeInfo").textContent =
+        "Employee: " + person.name +
+        "\nRole: " + person.role;
+
+      $("employeeInfo").classList.remove("hidden");
+      $("cameraBtn").disabled = !locationData;
+
+      showStatus("", "");
+    });
+
+    // STEP 1: GET GPS LOCATION.
     function getLocation() {
       if (!navigator.geolocation) {
         showStatus(
@@ -380,7 +432,7 @@ Location: Not captured</div>
               c.accuracy <= 0
             ) {
               throw new Error(
-                "GPS returned invalid coordinates or accuracy."
+                "The browser returned invalid GPS information."
               );
             }
 
@@ -391,7 +443,7 @@ Location: Not captured</div>
               address: ""
             };
 
-            showStatus("Getting your location address...");
+            showStatus("Getting your address...");
 
             const url =
               "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
@@ -404,11 +456,10 @@ Location: Not captured</div>
 
               if (response.ok) {
                 const result = await response.json();
-                locationData.address =
-                  result.display_name || "";
+                locationData.address = result.display_name || "";
               }
             } catch (error) {
-              // Coordinates can still be submitted if address lookup fails.
+              // GPS coordinates remain available if address lookup fails.
             }
 
             updateLocationDetails();
@@ -417,14 +468,13 @@ Location: Not captured</div>
             $("locationBtn").textContent = "Location Captured";
 
             showStatus(
-              "Location captured. Next, open the camera.",
+              "Location captured. You can open the camera now.",
               "success"
             );
 
           } catch (error) {
             showStatus(
-              error.message ||
-              "Could not process your location. Please retry.",
+              error.message || "Could not process location.",
               "error"
             );
 
@@ -442,8 +492,7 @@ Location: Not captured</div>
           };
 
           showStatus(
-            messages[error.code] ||
-            "Could not get your location.",
+            messages[error.code] || "Could not get your location.",
             "error"
           );
 
@@ -491,7 +540,7 @@ Location: Not captured</div>
         (locationData.address || "Address unavailable");
     }
 
-    // STEP 2: Open camera.
+    // STEP 2: OPEN CAMERA.
     async function startCamera() {
       if (!selectedEmployee()) {
         showStatus("Please select your name first.", "error");
@@ -500,7 +549,7 @@ Location: Not captured</div>
 
       if (!locationData) {
         showStatus(
-          "Get your location before opening the camera.",
+          "Get your current location before opening the camera.",
           "error"
         );
         return;
@@ -554,15 +603,11 @@ Location: Not captured</div>
         );
 
       } catch (error) {
-        const detail =
-          (error && error.name ? error.name + ": " : "") +
-          (error && error.message
-            ? error.message
-            : "Unknown camera error");
-
         showStatus(
-          "Unable to open camera. " + detail +
-          "\nCheck browser camera permissions and close other apps using the camera.",
+          "Unable to open camera. " +
+          (error.name || "") + " " +
+          (error.message || "") +
+          "\nCheck browser camera permissions.",
           "error"
         );
 
@@ -571,7 +616,7 @@ Location: Not captured</div>
       }
     }
 
-    // STEP 3: Capture selfie and add a location stamp.
+    // STEP 3: CAPTURE SELFIE AND STAMP LOCATION DETAILS.
     function capturePhoto() {
       if (!stream || !locationData || !selectedEmployee()) {
         showStatus(
@@ -610,13 +655,7 @@ Location: Not captured</div>
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      ctx.drawImage(
-        video,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const scale = canvas.width / 640;
       const fontSize = Math.max(14, Math.round(16 * scale));
@@ -625,7 +664,8 @@ Location: Not captured</div>
 
       const lines = [
         "LEAPSTART ATTENDANCE",
-        "Employee: " + person[0],
+        "Employee: " + person.name,
+        "Role: " + person.role,
         "Date: " + date + " | Time: " + time,
         "Latitude: " + locationData.lat.toFixed(6),
         "Longitude: " + locationData.lng.toFixed(6),
@@ -666,12 +706,7 @@ Location: Not captured</div>
       const top = canvas.height - overlayHeight;
 
       ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillRect(
-        0,
-        top,
-        canvas.width,
-        overlayHeight
-      );
+      ctx.fillRect(0, top, canvas.width, overlayHeight);
 
       ctx.fillStyle = "#fff";
 
@@ -704,7 +739,7 @@ Location: Not captured</div>
       $("submitBtn").disabled = false;
 
       showStatus(
-        "Photo captured with a visible location stamp. Review it before submitting.",
+        "Photo captured. Review it before submitting.",
         "success"
       );
     }
@@ -725,7 +760,7 @@ Location: Not captured</div>
       video.srcObject = null;
     }
 
-    // STEP 4: Submit attendance to Apps Script.
+    // STEP 4: SUBMIT TO APPS SCRIPT.
     function submitAttendance() {
       const person = selectedEmployee();
 
@@ -755,12 +790,12 @@ Location: Not captured</div>
       $("locationBtn").disabled = true;
 
       showStatus(
-        "Submitting photo and attendance details. Please wait..."
+        "Submitting attendance and photo. Please wait..."
       );
 
       const payload = {
-        name: person[0],
-        role: person[1],
+        name: person.name,
+        role: person.role,
         lat: locationData.lat,
         lng: locationData.lng,
         accuracy: locationData.accuracy,
@@ -778,32 +813,34 @@ Location: Not captured</div>
       $("submitForm").submit();
 
       submitTimeout = window.setTimeout(() => {
-        if (busy) {
-          busy = false;
+        if (!busy) return;
 
-          window.removeEventListener(
-            "message",
-            handleSubmissionMessage
-          );
+        busy = false;
 
-          $("submitBtn").disabled = false;
-          $("retakeBtn").disabled = false;
-          $("employee").disabled = false;
-          $("locationBtn").disabled = false;
+        window.removeEventListener(
+          "message",
+          handleSubmissionMessage
+        );
 
-          showStatus(
-            "No confirmation was received. Check the Attendance sheet before retrying to avoid a duplicate submission.",
-            "error"
-          );
-        }
+        $("submitBtn").disabled = false;
+        $("retakeBtn").disabled = false;
+        $("employee").disabled = false;
+        $("locationBtn").disabled = false;
+
+        showStatus(
+          "No confirmation was received. Check the Attendance sheet before retrying to avoid duplicate submissions.",
+          "error"
+        );
       }, 45000);
     }
 
-    // UPDATED RESPONSE HANDLER
+    // RESPONSE HANDLER.
     function handleSubmissionMessage(event) {
-      // Accept only the attendance response message.
-      // Apps Script can redirect the form response across Google domains,
-      // so checking event.source against the iframe may reject a valid reply.
+      /*
+        This checks the response format only.
+        It does not authenticate the sender. A production deployment
+        should use a more robust, verified response mechanism.
+      */
       if (
         !event.data ||
         event.data.type !== "leapstart-attendance-result"
@@ -834,7 +871,7 @@ Location: Not captured</div>
 
         showStatus(
           result.message ||
-          "Attendance could not be recorded. Please check the sheet before retrying.",
+          "Attendance could not be recorded. Check the sheet before retrying.",
           "error"
         );
 
@@ -853,7 +890,6 @@ Location: Not captured</div>
       $("submitBtn").disabled = true;
     }
 
-    // Stop camera when leaving the page.
     window.addEventListener("pagehide", stopCamera);
   </script>
 </body>
