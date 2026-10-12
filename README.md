@@ -3,376 +3,293 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f4d68">
   <title>LeapStart | Employee Attendance</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --teal: #0f4d68;
-      --blue: #3bb3e3;
-      --orange: #f5b95a;
-      --text: #5b6470;
-      --line: #e5eaf0;
-      --success: #15803d;
-      --danger: #dc2626;
+    * {
+      box-sizing: border-box;
     }
-
-    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: "Inter", system-ui, sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, #e9f6fc 0, #fff 380px) no-repeat #fff;
+      padding: 20px 14px 40px;
+      font-family: Arial, sans-serif;
+      background: #f0f5fa;
+      color: #18344b;
     }
 
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 4vw;
-      background: #fff;
-      box-shadow: 0 2px 14px rgba(15,77,104,.05);
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-
-    .logo b {
-      display: block;
-      font-size: 27px;
-      font-weight: 800;
-      color: var(--teal);
-    }
-
-    .logo small {
-      display: block;
-      font-size: 8px;
-      letter-spacing: .25em;
-      color: var(--teal);
-      margin-top: 3px;
-    }
-
-    .links {
-      display: flex;
-      gap: 20px;
-      font-size: 14px;
-    }
-
-    .links a {
-      color: var(--teal);
-      text-decoration: none;
-    }
-
-    .btn {
-      font: inherit;
-      font-weight: 600;
-      border: 0;
-      cursor: pointer;
-      color: #fff;
-      background: var(--teal);
-      padding: 12px 22px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-size: 14px;
-      box-shadow: 0 8px 18px rgba(15,77,104,.18);
-    }
-
-    .btn:disabled {
-      opacity: .65;
-      cursor: wait;
-    }
-
-    header {
+    .header {
       text-align: center;
-      padding: 48px 18px 24px;
+      margin: 15px 0 24px;
     }
 
-    .badge {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      border: 1.5px solid #8fd3ee;
-      background: #dff3fb;
-      color: #111;
-      border-radius: 999px;
-      padding: 9px 20px;
-      font-size: 14px;
+    .header h1 {
+      color: #0f4d68;
+      margin-bottom: 8px;
     }
 
-    h1 {
-      margin: 26px 0 12px;
-      color: var(--teal);
-      font-weight: 700;
-      font-size: clamp(34px, 7vw, 68px);
-      line-height: 1.12;
-    }
-
-    h1 .gradient {
-      background: linear-gradient(90deg, var(--blue), #b9bf9c 50%, var(--orange));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .sub {
-      font-size: clamp(16px, 2.2vw, 20px);
+    .header p {
+      color: #617385;
       line-height: 1.6;
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .sub em {
-      font-style: normal;
-      color: #bd821d;
-      font-weight: 600;
-    }
-
-    .clock {
-      margin-top: 22px;
-      color: var(--teal);
-    }
-
-    .clock strong {
-      display: block;
-      font-size: 32px;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 10px 16px 50px;
+      font-size: 14px;
     }
 
     .card {
       background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 14px 40px rgba(15,77,104,.08);
+      border: 1px solid #e0e8ef;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 28px #18344b0b;
     }
 
-    .bar {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    input {
-      font: inherit;
-      padding: 13px 18px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      width: 100%;
-      max-width: 480px;
-      color: var(--teal);
-      outline: none;
-    }
-
-    input:focus { border-color: var(--blue); }
-
-    .hint { font-size: 13px; }
-
-    .wrap { overflow-x: auto; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 760px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 14px 12px;
-      border: 1px solid #dce2e8;
+    label {
+      display: block;
       font-size: 14px;
-      vertical-align: middle;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
-    th {
-      font-size: 12px;
-      letter-spacing: .06em;
-      color: var(--teal);
-      background: #f8fafc;
+    select, button {
+      font: inherit;
+      width: 100%;
+      padding: 13px;
+      border-radius: 9px;
     }
 
-    tbody tr:nth-child(even) { background: #f5f7f9; }
-    td strong { color: var(--teal); }
-
-    .ok {
-      display: inline-block;
-      background: #e6f7ee;
-      color: var(--success);
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-weight: 600;
-      font-size: 12px;
+    select {
+      border: 1px solid #cbd7e2;
+      background: #fff;
+      margin-bottom: 15px;
     }
 
-    .loc {
-      font-size: 12px;
-      max-width: 280px;
+    button {
+      border: 0;
+      background: #0f4d68;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 9px;
+    }
+
+    button.secondary {
+      background: #277da1;
+    }
+
+    button.capture {
+      background: #15803d;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .camera-box {
+      background: #101820;
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    video, canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    video {
+      display: none;
+    }
+
+    canvas {
+      display: none;
+      background: #101820;
+    }
+
+    .placeholder {
+      padding: 35px 15px;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 14px;
+      color: #e1e8ef;
+    }
+
+    .details {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 9px;
+      background: #f3f7fa;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .status {
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
-    .loc a { color: #087ca7; }
+    .success {
+      color: #15803d;
+    }
 
-    .err {
-      color: var(--danger);
+    .error {
+      color: #c62828;
+    }
+
+    .small {
       font-size: 12px;
-      line-height: 1.5;
+      color: #6b7885;
+      line-height: 1.6;
+      margin-top: 14px;
     }
 
-    #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%) translateY(30px);
-      background: var(--teal);
-      color: #fff;
-      padding: 16px 22px;
-      border-radius: 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.25);
-      opacity: 0;
-      pointer-events: none;
-      transition: .3s;
-      max-width: 92vw;
-      font-size: 14px;
-      line-height: 1.5;
-      z-index: 9999;
+    .hidden {
+      display: none !important;
     }
 
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    #toast b {
-      display: block;
-      font-size: 16px;
-      color: var(--orange);
-    }
-
-    footer {
-      text-align: center;
+    .required-note {
       font-size: 12px;
-      padding: 18px;
-    }
-
-    @media (max-width: 860px) {
-      .links { display: none; }
-      nav { padding: 12px 18px; }
-    }
-
-    @media (max-width: 600px) {
-      header { padding-top: 32px; }
-      .card { padding: 12px; }
-      .bar { align-items: stretch; }
-      input { max-width: 100%; }
-      .hint { text-align: center; }
+      color: #617385;
+      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-  <nav>
-    <a class="logo" href="https://leapstart.in" aria-label="LeapStart School of Technology">
-      <svg width="44" height="48" viewBox="0 0 44 48" aria-hidden="true">
-        <path d="M4 6l18-4 18 4v20c0 10-8 17-18 20C12 43 4 36 4 26z"
-          fill="#fff" stroke="#0f4d68" stroke-width="3"/>
-        <path d="M14 30l12-16M26 14h-8M26 14v8"
-          fill="none" stroke="#0f4d68" stroke-width="3.2"
-          stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 12l8-2" stroke="#f5b95a" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-      <span>
-        <b>LEAPSTART</b>
-        <small>SCHOOL OF TECHNOLOGY</small>
-      </span>
-    </a>
-
-    <div class="links">
-      <a href="https://leapstart.in/about">About</a>
-      <a href="https://leapstart.in/programs">Programs</a>
-      <a href="https://leapstart.in/school-of-skills">Skills</a>
-      <a href="https://leapstart.in/admissions">Admissions</a>
-      <a href="https://leapstart.in/faq">FAQ</a>
+    <div class="header">
+      <h1>LeapStart Attendance</h1>
+      <p>
+        Capture a live selfie and submit your attendance with GPS details.
+      </p>
     </div>
 
-    <a class="btn" href="https://leapstart.in/contact">Contact us</a>
-  </nav>
+    <section class="card">
+      <label for="employee">Select employee</label>
 
-  <header>
-    <span class="badge">
-      ✨ Employee Attendance · <span id="badgeDate"></span>
-    </span>
+      <select id="employee">
+        <option value="">-- Select your name --</option>
+      </select>
 
-    <h1>
-      Mark Your<br>
-      <span class="gradient">Daily</span> Attendance
-    </h1>
+      <button id="locationBtn" onclick="getLocation()">
+        1. Get Current Location
+      </button>
 
-    <p class="sub">
-      Find your name, tap <em>Check-in</em> and allow location access.
-      Your <em>date, time and location</em> are submitted for attendance.
+      <div id="details" class="details">Date: Not captured
+Time: Not captured
+Location: Not captured</div>
+
+      <button
+        id="cameraBtn"
+        class="secondary"
+        onclick="startCamera()"
+        disabled>
+        2. Open Camera
+      </button>
+
+      <p class="required-note">
+        Allow camera and location access when prompted.
+        Camera access requires HTTPS and a supported browser.
+      </p>
+    </section>
+
+    <section class="card">
+      <h3>Live camera and geotagged photo</h3>
+
+      <div class="camera-box">
+        <div id="placeholder" class="placeholder">
+          Your camera preview will appear here.
+        </div>
+
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <button
+        id="captureBtn"
+        class="capture"
+        onclick="capturePhoto()"
+        disabled>
+        3. Capture Selfie
+      </button>
+
+      <button
+        id="retakeBtn"
+        class="secondary hidden"
+        onclick="retakePhoto()">
+        Retake Photo
+      </button>
+
+      <button
+        id="submitBtn"
+        onclick="submitAttendance()"
+        disabled>
+        4. Submit Attendance
+      </button>
+
+      <div
+        id="status"
+        class="status"
+        role="status"
+        aria-live="polite">
+      </div>
+    </section>
+
+    <p class="small">
+      Your photo and attendance information will be submitted to the
+      LeapStart attendance system. Take only your own photo and follow
+      your organization's attendance policy.
     </p>
 
-    <div class="clock">
-      <strong id="time">--:--:--</strong>
-      <span id="date"></span>
-    </div>
-  </header>
+    <!-- Apps Script submission response iframe -->
+    <iframe
+      id="submitFrame"
+      name="submitFrame"
+      title="Attendance submission response"
+      class="hidden">
+    </iframe>
 
-  <main>
-    <div class="card">
-      <div class="bar">
-        <input id="q" type="search" placeholder="Search your name..."
-          autocomplete="off" aria-label="Search employee name">
-        <span class="hint">Location permission is required to check in.</span>
-      </div>
+    <!-- Hidden form sends data to Apps Script -->
+    <form
+      id="submitForm"
+      method="post"
+      target="submitFrame"
+      class="hidden">
 
-      <div class="wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Employee</th>
-              <th>Role</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Location</th>
-              <th>Attendance</th>
-            </tr>
-          </thead>
-          <tbody id="rows"></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
+      <input
+        type="hidden"
+        name="payload"
+        id="payloadInput">
+    </form>
 
-  <footer>© 2026 LeapStart School of Technology. All rights reserved.</footer>
-  <div id="toast" role="status" aria-live="polite"></div>
+  </div>
 
   <script>
-    // YOUR GOOGLE APPS SCRIPT WEB APP URL
-    var SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbyGA87BMSgqzQwsqaih70npcB4uCXA0cMqqtlan_fWxsvA51CUL5ZBKGVm0mPa0RdVp/exec";
+    // YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbyQSIir9sTPtzlncX0Thktz8lJcYWu5x1DlThpbAjbIodGXBXxx9_Ap168WXSw4O_tq/exec";
 
-    // Replace these sample names with your actual employee list.
-    var people = [
+    // REPLACE THESE EXAMPLE EMPLOYEES WITH YOUR ACTUAL EMPLOYEE LIST
+    // Format: ["Employee Name", "Role"]
+    const employees = [
       ["Aarav Reddy", "Mentor"],
       ["Priya Sharma", "Operations"],
       ["Rohit Verma", "Software Engineer"],
@@ -385,304 +302,554 @@
       ["Divya Menon", "Accounts"]
     ];
 
-    var tableBody = document.getElementById("rows");
-    var searchBox = document.getElementById("q");
-    var toast = document.getElementById("toast");
+    const $ = id => document.getElementById(id);
 
-    function esc(value) {
-      return String(value).replace(/[&<>"']/g, function (c) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;"
-        }[c];
-      });
-    }
+    let stream = null;
+    let locationData = null;
+    let capturedPhoto = null;
+    let busy = false;
+    let submitTimeout = null;
 
-    function today() {
-      return new Date().toLocaleDateString("en-CA", {
-        timeZone: "Asia/Kolkata"
-      });
-    }
+    const video = $("video");
+    const canvas = $("canvas");
+    const ctx = canvas.getContext("2d");
 
-    var storageKey = "ls_att_" + today();
-    var records = {};
+    $("submitForm").action = SCRIPT_URL;
 
-    try {
-      records = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    } catch (error) {
-      records = {};
-    }
+    // Populate employee dropdown
+    employees.forEach((person, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = person[0] + " — " + person[1];
+      $("employee").appendChild(option);
+    });
 
-    function saveRecords() {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(records));
-      } catch (error) {
-        console.warn("Could not save local attendance cache.", error);
+    $("employee").addEventListener("change", () => {
+      capturedPhoto = null;
+      $("submitBtn").disabled = true;
+      $("retakeBtn").classList.add("hidden");
+      canvas.style.display = "none";
+      $("placeholder").classList.remove("hidden");
+
+      if ($("employee").value === "") {
+        $("cameraBtn").disabled = true;
+        $("captureBtn").disabled = true;
+        stopCamera();
+      } else {
+        $("cameraBtn").disabled = !locationData;
+        $("status").textContent = "";
       }
+    });
+
+    function selectedEmployee() {
+      const index = $("employee").value;
+      return index === "" ? null : employees[Number(index)];
     }
 
-    function updateClock() {
-      var now = new Date();
-      var opts = { timeZone: "Asia/Kolkata" };
-
-      document.getElementById("time").textContent =
-        now.toLocaleTimeString("en-IN", Object.assign({
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true
-        }, opts));
-
-      document.getElementById("date").textContent =
-        now.toLocaleDateString("en-IN", Object.assign({
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }, opts));
-
-      document.getElementById("badgeDate").textContent =
-        now.toLocaleDateString("en-IN", Object.assign({
-          day: "2-digit",
-          month: "short",
-          year: "numeric"
-        }, opts));
+    function showStatus(message, type) {
+      $("status").textContent = message;
+      $("status").className = "status " + (type || "");
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function locationHTML(record) {
-      var address = esc(record.address || "");
-      var coordinates =
-        Number(record.lat).toFixed(5) + ", " +
-        Number(record.lng).toFixed(5);
-
-      var mapURL =
-        "https://maps.google.com/?q=" +
-        encodeURIComponent(record.lat + "," + record.lng);
-
-      return (
-        (address ? address + "<br>" : "") +
-        "<a target='_blank' rel='noopener noreferrer' href='" +
-        mapURL + "'>" + coordinates + "</a>"
-      );
-    }
-
-    function render() {
-      var query = searchBox.value.trim().toLowerCase();
-      tableBody.innerHTML = "";
-
-      people.forEach(function (person, index) {
-        var name = person[0];
-        var role = person[1];
-
-        if (query && name.toLowerCase().indexOf(query) === -1) {
-          return;
-        }
-
-        var record = records[name];
-        var row = document.createElement("tr");
-
-        var locationContent = record ? locationHTML(record) : "—";
-
-        var attendanceContent = record
-          ? "<span class='ok'>✓ Logged in</span>"
-          : "<button class='btn' data-index='" + index + "'>Check-in</button>";
-
-        row.innerHTML =
-          "<td><strong>" + esc(name) + "</strong></td>" +
-          "<td>" + esc(role) + "</td>" +
-          "<td>" + (record ? esc(record.date) : "—") + "</td>" +
-          "<td>" + (record ? esc(record.time) : "—") + "</td>" +
-          "<td class='loc' id='location-" + index + "'>" +
-          locationContent + "</td>" +
-          "<td>" + attendanceContent + "</td>";
-
-        tableBody.appendChild(row);
-      });
-    }
-
-    function showMessage(title, message) {
-      toast.replaceChildren();
-
-      var heading = document.createElement("b");
-      heading.textContent = title;
-      toast.appendChild(heading);
-
-      var content = document.createElement("div");
-      content.textContent = message;
-      toast.appendChild(content);
-
-      toast.className = "show";
-
-      clearTimeout(showMessage.timer);
-      showMessage.timer = setTimeout(function () {
-        toast.className = "";
-      }, 7000);
-    }
-
-    function getAddress(latitude, longitude) {
-      var controller = new AbortController();
-      var timer = setTimeout(function () {
-        controller.abort();
-      }, 8000);
-
-      var url =
-        "https://nominatim.openstreetmap.org/reverse" +
-        "?format=jsonv2&lat=" +
-        encodeURIComponent(latitude) +
-        "&lon=" +
-        encodeURIComponent(longitude);
-
-      return fetch(url, { signal: controller.signal })
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error("Address lookup failed.");
-          }
-          return response.json();
-        })
-        .then(function (data) {
-          return data.display_name || "";
-        })
-        .catch(function () {
-          // Attendance can still be submitted with coordinates.
-          return "";
-        })
-        .finally(function () {
-          clearTimeout(timer);
-        });
-    }
-
-    function submitAttendance(person, position, button, locationCell) {
-      var name = person[0];
-      var role = person[1];
-      var coords = position.coords;
-
-      var latitude = coords.latitude;
-      var longitude = coords.longitude;
-      var accuracy = Math.round(coords.accuracy);
-
-      button.textContent = "Getting address...";
-
-      getAddress(latitude, longitude)
-        .then(function (address) {
-          button.textContent = "Recording...";
-
-          var payload = {
-            name: name,
-            role: role,
-            lat: latitude,
-            lng: longitude,
-            accuracy: accuracy,
-            address: address
-          };
-
-          return fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8"
-            },
-            body: JSON.stringify(payload)
-          }).then(function (response) {
-            if (!response.ok) {
-              throw new Error("Server returned HTTP " + response.status);
-            }
-            return response.json();
-          }).then(function (result) {
-            if (!result.ok) {
-              throw new Error(result.error || "Attendance was not saved.");
-            }
-
-            // CORRECTED: save the actual address with the attendance record.
-            records[name] = {
-              date: result.date,
-              time: result.time,
-              lat: latitude,
-              lng: longitude,
-              accuracy: accuracy,
-              address: address
-            };
-
-            saveRecords();
-            render();
-
-            showMessage(
-              result.duplicate ? "Already checked in today" : "Attendance recorded",
-              name + " · " + result.date + " · " + result.time
-            );
-          });
-        })
-        .catch(function (error) {
-          console.error("Attendance submission failed:", error);
-
-          button.disabled = false;
-          button.textContent = "Check-in";
-
-          locationCell.textContent =
-            "Attendance could not be confirmed. Check Apps Script deployment and Executions, then retry.";
-          locationCell.className = "loc err";
-        });
-    }
-
-    tableBody.addEventListener("click", function (event) {
-      var button = event.target.closest("button");
-      if (!button) return;
-
-      var index = Number(button.dataset.index);
-      var person = people[index];
-      var locationCell = document.getElementById("location-" + index);
-
-      if (!SCRIPT_URL || SCRIPT_URL.indexOf("https://script.google.com/") !== 0) {
-        locationCell.textContent = "Google Apps Script URL is not configured.";
-        locationCell.className = "loc err";
-        return;
-      }
-
+    // STEP 1: GET CURRENT GPS LOCATION
+    function getLocation() {
       if (!navigator.geolocation) {
-        locationCell.textContent = "Geolocation is not supported by this browser.";
-        locationCell.className = "loc err";
+        showStatus(
+          "Your browser does not support GPS location.",
+          "error"
+        );
         return;
       }
 
-      button.disabled = true;
-      button.textContent = "Requesting location...";
-      locationCell.textContent = "Waiting for location permission...";
+      $("locationBtn").disabled = true;
+      $("locationBtn").textContent = "Getting location...";
 
       navigator.geolocation.getCurrentPosition(
-        function (position) {
-          submitAttendance(person, position, button, locationCell);
-        },
-        function (error) {
-          button.disabled = false;
-          button.textContent = "Check-in";
+        async position => {
+          try {
+            const c = position.coords;
 
-          var message = "Could not get your location. Please try again.";
-          if (error.code === 1) {
-            message = "Location access denied. Allow location access in your browser settings.";
-          } else if (error.code === 2) {
-            message = "Your location could not be determined. Check device location settings.";
-          } else if (error.code === 3) {
-            message = "Location request timed out. Please try again.";
+            if (
+              !Number.isFinite(c.latitude) ||
+              !Number.isFinite(c.longitude) ||
+              !Number.isFinite(c.accuracy) ||
+              c.accuracy <= 0
+            ) {
+              throw new Error(
+                "GPS returned invalid coordinates or accuracy."
+              );
+            }
+
+            locationData = {
+              lat: c.latitude,
+              lng: c.longitude,
+              accuracy: c.accuracy,
+              address: ""
+            };
+
+            showStatus("Getting your location address...");
+
+            const url =
+              "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+              encodeURIComponent(c.latitude) +
+              "&lon=" +
+              encodeURIComponent(c.longitude);
+
+            try {
+              const response = await fetch(url);
+
+              if (response.ok) {
+                const result = await response.json();
+                locationData.address = result.display_name || "";
+              }
+            } catch (error) {
+              // Coordinates can still be submitted if address lookup fails.
+            }
+
+            updateLocationDetails();
+
+            $("cameraBtn").disabled = !selectedEmployee();
+            $("locationBtn").textContent = "Location Captured";
+
+            showStatus(
+              "Location captured. Next, open the camera.",
+              "success"
+            );
+
+          } catch (error) {
+            showStatus(
+              error.message ||
+              "Could not process your location. Please retry.",
+              "error"
+            );
+
+            $("locationBtn").disabled = false;
+            $("locationBtn").textContent =
+              "1. Get Current Location";
           }
-
-          locationCell.textContent = message;
-          locationCell.className = "loc err";
         },
+
+        error => {
+          const messages = {
+            1: "Location permission denied. Allow location access in browser settings.",
+            2: "Your device could not determine the location. Check GPS settings.",
+            3: "Location request timed out. Please try again."
+          };
+
+          showStatus(
+            messages[error.code] || "Could not get your location.",
+            "error"
+          );
+
+          $("locationBtn").disabled = false;
+          $("locationBtn").textContent =
+            "1. Get Current Location";
+        },
+
         {
           enableHighAccuracy: true,
-          timeout: 20000,
+          timeout: 25000,
           maximumAge: 0
         }
       );
-    });
+    }
 
-    searchBox.addEventListener("input", render);
-    render();
+    function updateLocationDetails() {
+      if (!locationData) return;
+
+      const now = new Date();
+
+      const date = now.toLocaleDateString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+
+      const time = now.toLocaleTimeString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      });
+
+      $("details").textContent =
+        "Date: " + date +
+        "\nTime: " + time +
+        "\nLatitude: " + locationData.lat.toFixed(6) +
+        "\nLongitude: " + locationData.lng.toFixed(6) +
+        "\nGPS accuracy: approximately " +
+        Math.round(locationData.accuracy) + " m" +
+        "\nAddress: " +
+        (locationData.address || "Address unavailable");
+    }
+
+    // STEP 2: OPEN CAMERA
+    async function startCamera() {
+      if (!selectedEmployee()) {
+        showStatus("Please select your name first.", "error");
+        return;
+      }
+
+      if (!locationData) {
+        showStatus(
+          "Get your location before opening the camera.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        showStatus(
+          "This browser does not expose camera access. Open the HTTPS GitHub Pages website in a current browser.",
+          "error"
+        );
+        return;
+      }
+
+      stopCamera();
+
+      $("cameraBtn").disabled = true;
+      $("cameraBtn").textContent = "Opening camera...";
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            facingMode: { ideal: "user" },
+            width: { ideal: 1280 },
+            height: { ideal: 960 }
+          }
+        });
+
+        video.srcObject = stream;
+        video.style.display = "block";
+        canvas.style.display = "none";
+        $("placeholder").classList.add("hidden");
+
+        await video.play();
+
+        $("captureBtn").disabled = false;
+        $("retakeBtn").classList.add("hidden");
+        $("submitBtn").disabled = true;
+        capturedPhoto = null;
+
+        $("cameraBtn").textContent = "Camera Open";
+
+        showStatus(
+          "Camera ready. Position your face and capture your selfie.",
+          "success"
+        );
+
+      } catch (error) {
+        const detail =
+          (error && error.name ? error.name + ": " : "") +
+          (error && error.message
+            ? error.message
+            : "Unknown camera error");
+
+        showStatus(
+          "Unable to open camera. " + detail +
+          "\nCheck Chrome camera permission for this GitHub Pages site and close other apps using the camera.",
+          "error"
+        );
+
+        $("cameraBtn").disabled = false;
+        $("cameraBtn").textContent = "2. Open Camera";
+      }
+    }
+
+    // STEP 3: CAPTURE SELFIE AND ADD LOCATION STAMP
+    function capturePhoto() {
+      if (!stream || !locationData || !selectedEmployee()) {
+        showStatus(
+          "Select your name, capture location and open the camera first.",
+          "error"
+        );
+        return;
+      }
+
+      if (!video.videoWidth || !video.videoHeight) {
+        showStatus(
+          "Camera is not ready yet. Please wait and retry.",
+          "error"
+        );
+        return;
+      }
+
+      const person = selectedEmployee();
+      const now = new Date();
+
+      const date = now.toLocaleDateString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+
+      const time = now.toLocaleTimeString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      });
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      ctx.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const scale = canvas.width / 640;
+      const fontSize = Math.max(14, Math.round(16 * scale));
+      const lineHeight = Math.round(fontSize * 1.5);
+      const padding = Math.round(14 * scale);
+
+      const lines = [
+        "LEAPSTART ATTENDANCE",
+        "Employee: " + person[0],
+        "Date: " + date + " | Time: " + time,
+        "Latitude: " + locationData.lat.toFixed(6),
+        "Longitude: " + locationData.lng.toFixed(6),
+        "GPS accuracy: approx. " +
+          Math.round(locationData.accuracy) + " m",
+        "Address: " +
+          (locationData.address || "Address unavailable")
+      ];
+
+      ctx.font = fontSize + "px Arial";
+
+      const maxTextWidth = canvas.width - padding * 2;
+      const wrappedLines = [];
+
+      lines.forEach(line => {
+        let current = "";
+
+        line.split(/\s+/).forEach(word => {
+          const test = current ? current + " " + word : word;
+
+          if (
+            ctx.measureText(test).width > maxTextWidth &&
+            current
+          ) {
+            wrappedLines.push(current);
+            current = word;
+          } else {
+            current = test;
+          }
+        });
+
+        if (current) wrappedLines.push(current);
+      });
+
+      const overlayHeight =
+        padding * 2 + wrappedLines.length * lineHeight;
+
+      const top = canvas.height - overlayHeight;
+
+      ctx.fillStyle = "rgba(0,0,0,0.75)";
+      ctx.fillRect(
+        0,
+        top,
+        canvas.width,
+        overlayHeight
+      );
+
+      ctx.fillStyle = "#fff";
+
+      wrappedLines.forEach((line, index) => {
+        ctx.font =
+          (index === 0 ? "bold " : "") +
+          fontSize + "px Arial";
+
+        ctx.fillText(
+          line,
+          padding,
+          top + padding +
+            (index + 1) * lineHeight -
+            Math.round(lineHeight * 0.2)
+        );
+      });
+
+      capturedPhoto = canvas.toDataURL("image/jpeg", 0.68);
+
+      video.style.display = "none";
+      canvas.style.display = "block";
+
+      stopCamera();
+
+      $("cameraBtn").disabled = false;
+      $("cameraBtn").textContent = "2. Open Camera";
+      $("captureBtn").disabled = true;
+      $("retakeBtn").classList.remove("hidden");
+      $("submitBtn").disabled = false;
+
+      showStatus(
+        "Photo captured with a visible location stamp. Review it before submitting.",
+        "success"
+      );
+    }
+
+    function retakePhoto() {
+      capturedPhoto = null;
+      $("submitBtn").disabled = true;
+      $("retakeBtn").classList.add("hidden");
+      startCamera();
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+
+      video.srcObject = null;
+    }
+
+    // STEP 4: SUBMIT ATTENDANCE TO GOOGLE APPS SCRIPT
+    function submitAttendance() {
+      const person = selectedEmployee();
+
+      if (!person || !locationData || !capturedPhoto) {
+        showStatus(
+          "Select your name, capture location and take a selfie first.",
+          "error"
+        );
+        return;
+      }
+
+      if (busy) return;
+
+      if (capturedPhoto.length > 5 * 1024 * 1024) {
+        showStatus(
+          "Photo is too large. Retake the selfie and try again.",
+          "error"
+        );
+        return;
+      }
+
+      busy = true;
+
+      $("submitBtn").disabled = true;
+      $("retakeBtn").disabled = true;
+      $("employee").disabled = true;
+      $("locationBtn").disabled = true;
+
+      showStatus(
+        "Submitting photo and attendance details. Please wait..."
+      );
+
+      const payload = {
+        name: person[0],
+        role: person[1],
+        lat: locationData.lat,
+        lng: locationData.lng,
+        accuracy: locationData.accuracy,
+        address: locationData.address,
+        photoData: capturedPhoto
+      };
+
+      $("payloadInput").value = JSON.stringify(payload);
+
+      // Receive the result from the Apps Script response iframe.
+      window.addEventListener(
+        "message",
+        handleSubmissionMessage
+      );
+
+      $("submitForm").submit();
+
+      submitTimeout = window.setTimeout(() => {
+        if (busy) {
+          busy = false;
+
+          window.removeEventListener(
+            "message",
+            handleSubmissionMessage
+          );
+
+          $("submitBtn").disabled = false;
+          $("retakeBtn").disabled = false;
+          $("employee").disabled = false;
+          $("locationBtn").disabled = false;
+
+          showStatus(
+            "No confirmation was received. Check the Attendance sheet before retrying to avoid a duplicate submission.",
+            "error"
+          );
+        }
+      }, 45000);
+    }
+
+    // PROCESS THE RESPONSE FROM APPS SCRIPT
+    function handleSubmissionMessage(event) {
+      if (
+        event.source !== $("submitFrame").contentWindow
+      ) {
+        return;
+      }
+
+      if (
+        !event.data ||
+        event.data.type !== "leapstart-attendance-result"
+      ) {
+        return;
+      }
+
+      window.removeEventListener(
+        "message",
+        handleSubmissionMessage
+      );
+
+      if (submitTimeout) {
+        clearTimeout(submitTimeout);
+      }
+
+      busy = false;
+
+      const result = event.data.result || {};
+
+      $("retakeBtn").disabled = false;
+
+      if (!result.ok) {
+        $("submitBtn").disabled = false;
+        $("employee").disabled = false;
+        $("locationBtn").disabled = false;
+
+        showStatus(
+          result.message ||
+          "Attendance could not be recorded. Please retry.",
+          "error"
+        );
+
+        return;
+      }
+
+      showStatus(
+        "Attendance recorded successfully!\n" +
+        "Employee: " + result.name +
+        "\nDate: " + result.date +
+        "\nTime: " + result.time +
+        "\nPhoto saved to Google Drive.",
+        "success"
+      );
+
+      // Prevent another submission from this page after success.
+      $("submitBtn").disabled = true;
+    }
+
+    // Stop the camera when leaving the page.
+    window.addEventListener("pagehide", stopCamera);
   </script>
-
 </body>
 </html>
