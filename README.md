@@ -792,7 +792,60 @@ Location: Not captured</div>
     }
 
     // PROCESS THE RESPONSE FROM APPS SCRIPT
-    function handleSubmissionMessage(event) {
+    
+function handleSubmissionMessage(event) {
+  // Accept only the attendance response message.
+  // Apps Script can redirect the form response across Google domains,
+  // so checking event.source against the iframe may reject a valid reply.
+  if (
+    !event.data ||
+    event.data.type !== "leapstart-attendance-result"
+  ) {
+    return;
+  }
+
+  window.removeEventListener(
+    "message",
+    handleSubmissionMessage
+  );
+
+  if (submitTimeout) {
+    clearTimeout(submitTimeout);
+    submitTimeout = null;
+  }
+
+  busy = false;
+
+  const result = event.data.result || {};
+
+  $("retakeBtn").disabled = false;
+
+  if (!result.ok) {
+    $("submitBtn").disabled = false;
+    $("employee").disabled = false;
+    $("locationBtn").disabled = false;
+
+    showStatus(
+      result.message ||
+      "Attendance could not be recorded. Please check the sheet before retrying.",
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    "Attendance recorded successfully!\n" +
+    "Employee: " + (result.name || "") +
+    "\nDate: " + (result.date || "") +
+    "\nTime: " + (result.time || "") +
+    "\nPhoto saved to Google Drive.",
+    "success"
+  );
+
+  $("submitBtn").disabled = true;
+}
+ {
       if (
         event.source !== $("submitFrame").contentWindow
       ) {
