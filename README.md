@@ -57,7 +57,8 @@
       margin-bottom: 8px;
     }
 
-    select, button {
+    select,
+    button {
       font: inherit;
       width: 100%;
       padding: 13px;
@@ -103,7 +104,8 @@
       color: white;
     }
 
-    video, canvas {
+    video,
+    canvas {
       width: 100%;
       height: auto;
       display: block;
@@ -259,7 +261,6 @@ Location: Not captured</div>
       your organization's attendance policy.
     </p>
 
-    <!-- Apps Script submission response iframe -->
     <iframe
       id="submitFrame"
       name="submitFrame"
@@ -267,7 +268,6 @@ Location: Not captured</div>
       class="hidden">
     </iframe>
 
-    <!-- Hidden form sends data to Apps Script -->
     <form
       id="submitForm"
       method="post"
@@ -283,12 +283,11 @@ Location: Not captured</div>
   </div>
 
   <script>
-    // YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    // Your deployed Google Apps Script web app URL.
     const SCRIPT_URL =
       "https://script.google.com/macros/s/AKfycbyQSIir9sTPtzlncX0Thktz8lJcYWu5x1DlThpbAjbIodGXBXxx9_Ap168WXSw4O_tq/exec";
 
-    // REPLACE THESE EXAMPLE EMPLOYEES WITH YOUR ACTUAL EMPLOYEE LIST
-    // Format: ["Employee Name", "Role"]
+    // Replace these examples with your actual employee names and roles.
     const employees = [
       ["Aarav Reddy", "Mentor"],
       ["Priya Sharma", "Operations"],
@@ -316,7 +315,7 @@ Location: Not captured</div>
 
     $("submitForm").action = SCRIPT_URL;
 
-    // Populate employee dropdown
+    // Populate employee dropdown.
     employees.forEach((person, index) => {
       const option = document.createElement("option");
       option.value = String(index);
@@ -326,8 +325,10 @@ Location: Not captured</div>
 
     $("employee").addEventListener("change", () => {
       capturedPhoto = null;
+
       $("submitBtn").disabled = true;
       $("retakeBtn").classList.add("hidden");
+
       canvas.style.display = "none";
       $("placeholder").classList.remove("hidden");
 
@@ -343,7 +344,10 @@ Location: Not captured</div>
 
     function selectedEmployee() {
       const index = $("employee").value;
-      return index === "" ? null : employees[Number(index)];
+
+      return index === ""
+        ? null
+        : employees[Number(index)];
     }
 
     function showStatus(message, type) {
@@ -351,7 +355,7 @@ Location: Not captured</div>
       $("status").className = "status " + (type || "");
     }
 
-    // STEP 1: GET CURRENT GPS LOCATION
+    // STEP 1: Get current GPS location.
     function getLocation() {
       if (!navigator.geolocation) {
         showStatus(
@@ -400,7 +404,8 @@ Location: Not captured</div>
 
               if (response.ok) {
                 const result = await response.json();
-                locationData.address = result.display_name || "";
+                locationData.address =
+                  result.display_name || "";
               }
             } catch (error) {
               // Coordinates can still be submitted if address lookup fails.
@@ -437,7 +442,8 @@ Location: Not captured</div>
           };
 
           showStatus(
-            messages[error.code] || "Could not get your location.",
+            messages[error.code] ||
+            "Could not get your location.",
             "error"
           );
 
@@ -485,7 +491,7 @@ Location: Not captured</div>
         (locationData.address || "Address unavailable");
     }
 
-    // STEP 2: OPEN CAMERA
+    // STEP 2: Open camera.
     async function startCamera() {
       if (!selectedEmployee()) {
         showStatus("Please select your name first.", "error");
@@ -505,7 +511,7 @@ Location: Not captured</div>
         !navigator.mediaDevices.getUserMedia
       ) {
         showStatus(
-          "This browser does not expose camera access. Open the HTTPS GitHub Pages website in a current browser.",
+          "Camera access is unavailable. Open the HTTPS website in a supported browser.",
           "error"
         );
         return;
@@ -529,6 +535,7 @@ Location: Not captured</div>
         video.srcObject = stream;
         video.style.display = "block";
         canvas.style.display = "none";
+
         $("placeholder").classList.add("hidden");
 
         await video.play();
@@ -536,6 +543,7 @@ Location: Not captured</div>
         $("captureBtn").disabled = false;
         $("retakeBtn").classList.add("hidden");
         $("submitBtn").disabled = true;
+
         capturedPhoto = null;
 
         $("cameraBtn").textContent = "Camera Open";
@@ -554,7 +562,7 @@ Location: Not captured</div>
 
         showStatus(
           "Unable to open camera. " + detail +
-          "\nCheck Chrome camera permission for this GitHub Pages site and close other apps using the camera.",
+          "\nCheck browser camera permissions and close other apps using the camera.",
           "error"
         );
 
@@ -563,7 +571,7 @@ Location: Not captured</div>
       }
     }
 
-    // STEP 3: CAPTURE SELFIE AND ADD LOCATION STAMP
+    // STEP 3: Capture selfie and add a location stamp.
     function capturePhoto() {
       if (!stream || !locationData || !selectedEmployee()) {
         showStatus(
@@ -690,6 +698,7 @@ Location: Not captured</div>
 
       $("cameraBtn").disabled = false;
       $("cameraBtn").textContent = "2. Open Camera";
+
       $("captureBtn").disabled = true;
       $("retakeBtn").classList.remove("hidden");
       $("submitBtn").disabled = false;
@@ -716,7 +725,7 @@ Location: Not captured</div>
       video.srcObject = null;
     }
 
-    // STEP 4: SUBMIT ATTENDANCE TO GOOGLE APPS SCRIPT
+    // STEP 4: Submit attendance to Apps Script.
     function submitAttendance() {
       const person = selectedEmployee();
 
@@ -761,7 +770,6 @@ Location: Not captured</div>
 
       $("payloadInput").value = JSON.stringify(payload);
 
-      // Receive the result from the Apps Script response iframe.
       window.addEventListener(
         "message",
         handleSubmissionMessage
@@ -791,67 +799,11 @@ Location: Not captured</div>
       }, 45000);
     }
 
-    // PROCESS THE RESPONSE FROM APPS SCRIPT
-    
-function handleSubmissionMessage(event) {
-  // Accept only the attendance response message.
-  // Apps Script can redirect the form response across Google domains,
-  // so checking event.source against the iframe may reject a valid reply.
-  if (
-    !event.data ||
-    event.data.type !== "leapstart-attendance-result"
-  ) {
-    return;
-  }
-
-  window.removeEventListener(
-    "message",
-    handleSubmissionMessage
-  );
-
-  if (submitTimeout) {
-    clearTimeout(submitTimeout);
-    submitTimeout = null;
-  }
-
-  busy = false;
-
-  const result = event.data.result || {};
-
-  $("retakeBtn").disabled = false;
-
-  if (!result.ok) {
-    $("submitBtn").disabled = false;
-    $("employee").disabled = false;
-    $("locationBtn").disabled = false;
-
-    showStatus(
-      result.message ||
-      "Attendance could not be recorded. Please check the sheet before retrying.",
-      "error"
-    );
-
-    return;
-  }
-
-  showStatus(
-    "Attendance recorded successfully!\n" +
-    "Employee: " + (result.name || "") +
-    "\nDate: " + (result.date || "") +
-    "\nTime: " + (result.time || "") +
-    "\nPhoto saved to Google Drive.",
-    "success"
-  );
-
-  $("submitBtn").disabled = true;
-}
- {
-      if (
-        event.source !== $("submitFrame").contentWindow
-      ) {
-        return;
-      }
-
+    // UPDATED RESPONSE HANDLER
+    function handleSubmissionMessage(event) {
+      // Accept only the attendance response message.
+      // Apps Script can redirect the form response across Google domains,
+      // so checking event.source against the iframe may reject a valid reply.
       if (
         !event.data ||
         event.data.type !== "leapstart-attendance-result"
@@ -866,6 +818,7 @@ function handleSubmissionMessage(event) {
 
       if (submitTimeout) {
         clearTimeout(submitTimeout);
+        submitTimeout = null;
       }
 
       busy = false;
@@ -881,7 +834,7 @@ function handleSubmissionMessage(event) {
 
         showStatus(
           result.message ||
-          "Attendance could not be recorded. Please retry.",
+          "Attendance could not be recorded. Please check the sheet before retrying.",
           "error"
         );
 
@@ -890,18 +843,17 @@ function handleSubmissionMessage(event) {
 
       showStatus(
         "Attendance recorded successfully!\n" +
-        "Employee: " + result.name +
-        "\nDate: " + result.date +
-        "\nTime: " + result.time +
+        "Employee: " + (result.name || "") +
+        "\nDate: " + (result.date || "") +
+        "\nTime: " + (result.time || "") +
         "\nPhoto saved to Google Drive.",
         "success"
       );
 
-      // Prevent another submission from this page after success.
       $("submitBtn").disabled = true;
     }
 
-    // Stop the camera when leaving the page.
+    // Stop camera when leaving the page.
     window.addEventListener("pagehide", stopCamera);
   </script>
 </body>
